@@ -9,10 +9,9 @@ CAR_API = "https://alerts.globaleas.org/api/v2/"
 r = httpx.get(CAR_API + "alerts/active")
 
 alerts = r.json()
-number = 1
 
 try:
-    for alert in alerts:
+    for number, alert in enumerate(alerts, start=1):
         print(f"""
         Alert #{number}
         Type:        {alert["type"]}
@@ -23,7 +22,6 @@ try:
         Message:     {alert["translation"]}
         """)
         input("")
-        number += 1
     print("No more alerts.")
     time.sleep(2)
     sys.exit()
