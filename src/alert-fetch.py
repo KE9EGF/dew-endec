@@ -11,6 +11,11 @@ r = httpx.get(CAR_API + "alerts/active")
 alerts = r.json()
 
 try:
+    if len(alerts) == 0:
+        print("No active alerts.")
+        time.sleep(2)
+        sys.exit
+    
     for number, alert in enumerate(alerts, start=1):
         print(f"""
         Alert #{number}
