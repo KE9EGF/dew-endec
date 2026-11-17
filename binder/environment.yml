@@ -1,4 +1,4 @@
-name: atmos
+name: dew
 
 channels:
   - conda-forge
@@ -10,5 +10,6 @@ dependencies:
   - datetime
   - pygame
   - httpx
-  - json
-  - pyttsx3
+  - uv
+  - pip:
+    - pyttsx3
