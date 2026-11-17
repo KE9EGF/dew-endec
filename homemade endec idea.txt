@@ -1,0 +1,60 @@
+My horrible homemade EAS ENDEC idea
+
+!! EVERYTHING IN HERE IS SUBJECT TO AS MANY CHANGES AS I PLEASE, ESPECIALLY THE ROADMAP !!
+
+Main Processor:
+Use a Banana Pi BPI-M2 Zero (~$30) for the main brain of the ENDEC. (so far)
+
+Power(?):
+Maybe a rechargeable battery + USB power?
+
+Names? (* = probability. /5)
+DAS-Mini *
+SAGE-Mini *
+EASyGET ***
+Isobar **
+Paul/Pauline *
+D.E.W. (Distant Early Warning. yes it's because of Rush) ****
+DEFCON ***
+DeskDEC ****
+
+FOR NOW, D.E.W. HAS BEEN CHOSEN
+
+Functions:
+Be able to fetch EAS alerts from online being issued with (a) specific FIPS code(s) and output them to a display.
+
+Possibly also display on an in-device screen (probably a small monochrome OLED) and play through a small speaker?
+
+Have the ability to connect to a computer and use software to generate* alerts of various variants (like alert type, screen layout, voice, and other elements) and output to a display by decoding incoming SAME tones through an aux port.
+
+*these alerts CAN be mocks, but can also be valid broadcasted SAME tones, like through NWR or similar. only thing that the user will have to set themself is the screen type (like EASyPLUS, DASDEC, SAGE, etc.)
+
+Concerns: (* = priority. /10)
+- How in the world will I do this at 13?? **********
+- Money; this probably will set me back around $100 ****
+- I will probably have to learn CAD and KiCAD ******
+- Stretching my Python knowledge to beyond its limits since I am using NO AI CODE ********
+- Soldering and stuff, which I know how to do, but not the best at ***
+- How do I simulate this to get started? *********
+
+Random But Useful Data And Notes:
+- Alert API: Most likely the Central Alert Repository API.
+- CAR API Reference: https://alerts.globaleas.org/swagger/index.html
+
+Roadmap:
+
+(these tasks are not necessarily in order, but may be separated)
+# = in progress tasks
+* = completed tasks
+
+0 - Preparation:
+- Decide on a name *
+- Set up a digital environment to work in *
+- Find suitable APIs to get alerts from *
+
+I - The Start: (YOU ARE HERE)
+- Simulate fetching EAS alerts from an API using Python with simple scripts #
+- Decoding those EAS alerts into the SAME headers and getting alert messages
+
+- Generate SAME headers by inputing individual elements
+- Work on synthesizing voices
