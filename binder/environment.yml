@@ -1,0 +1,14 @@
+name: atmos
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - numpy
+  - requests
+  - datetime
+  - pygame
+  - httpx
+  - json
+  - pyttsx3
