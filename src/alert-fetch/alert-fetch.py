@@ -5,26 +5,40 @@ import json
 
 import httpx  # type: ignore
 
+# Loading JSON stuff
+with open("config.json", "r") as file:
+    config = json.load(file)
+    
 # Variables and crap
 CAR_API = "https://alerts.globaleas.org/api/v2/"
-new = {
-    "monitored": ['000000']
-}
+monitored = config
 
 def clear():
     # This just clears the terminal output
     print("\033[2J\033[H", end="")
+    # COMMENTED OUT FOR DEBUGGING PURPOSES
+    pass
 
-def writeJSON(file, input):       
+def writeJSON(file="config.json", input):       
     with open(file, "w+") as output:
         json.dump(input, output, indent=4)
-        
-# Loading JSON stuff
-with open("config.json", "r") as file:
-    config = json.load(file)
 
-writeJSON("config.json", new)
-
+def showAlerts(alerts):
+    for number, alert in enumerate(alerts, start=1):
+        print(f"""
+        Alert #{number}
+        Type:        {alert["type"]}
+        Severity:    {alert["severity"]}
+        Start Time:  {alert["startTime"]}
+        End Time:    {alert["endTime"]}
+        SAME Header: {alert["protocolHeader"]}
+        Message:     {alert["translation"]}
+        """)
+        input("")
+        clear()
+    print("No more alerts.")
+    time.sleep(2)
+    
 # Getting active alerts
 r = httpx.get(CAR_API + "alerts/active")
 activeAlerts = r.json()
@@ -34,6 +48,8 @@ alerts = []
 try:
     while True:
         clear()
+        choice = ""
+        
         print("ALERT-FETCH\n")
         print("""
         1. Alerts from FIPS Codes
@@ -44,43 +60,53 @@ try:
         6. Exit
         """)
         choice = input("==> ")
+        # FIX IF BROKEN
         if choice == "1":
+            if len(activeAlerts) == 0:
+                print("No active alerts.")
+                time.sleep(2)
+                continue
             for alert in activeAlerts:
                 if any(code in monitored for code in alert["fipsCodes"]):
                     alerts.append(alert)
+            showAlerts(alerts)
         elif choice == "2":
+            if len(activeAlerts) == 0:
+                print("No active alerts.")
+                time.sleep(2)
+                continue
             alerts = activeAlerts
+            showAlerts(alerts)
         elif choice == "3":
-            clear()
-            print("Enter one 5-digit FIPS code at a time. Enter nothing to exit.")
-            print("IF YOU ENTER INVALID CODES, YOU WILL NOT BE ABLE TO FILTER ALERTS!")
-            code = input("==> ")
-            try:
-                code = int(code)
-            except ValueError:
-                print("Please enter a 5-digit FIPS code.")
-                time.sleep(1)
-            if len(code) == 5:
-                pass
-        if len(activeAlerts) == 0:
-            print("No active alerts.")
-            time.sleep(2)
-            sys.exit()
-        for number, alert in enumerate(alerts, start=1):
-            print(f"""
-            Alert #{number}
-            Type:        {alert["type"]}
-            Severity:    {alert["severity"]}
-            Start Time:  {alert["startTime"]}
-            End Time:    {alert["endTime"]}
-            SAME Header: {alert["protocolHeader"]}
-            Message:     {alert["translation"]}
-            """)
-            input("")
-            clear()
-        print("No more alerts.")
-        time.sleep(2)
-        sys.exit()
+            while True:
+                clear()
+                print("Enter one 6-digit FIPS code at a time. Enter nothing to exit.")
+                print("!! IF YOU ENTER CODES THAT AREN'T ASSIGNED TO COUNTIES, FILTERING ALERTS WILL NOT WORK !!")
+                code = input("==> ")
+                if len(code) == 0:
+                    break
+                elif not code.isdecimal():
+                    print("Please enter a 6-digit FIPS code.") 
+                    time.sleep(1)
+                elif len(code) == 6:
+                    monitored.append(code)
+                    writeJSON({"monitored": monitored})
+                else:
+                    print("Please enter a 6-digit FIPS code.")
+                    time.sleep(1)
+        elif choice == "5":
+            while True:
+                clear()
+                print("Are you sure you want to clear FIPS codes? (y/N)")
+                clearConfirm = input("==> ").lower()
+                if clearConfirm == "y":
+                    monitored = []
+                    writeJSON({"monitored": monitored})
+                    break
+                elif clearConfirm == "n" or len(clearConfirm) == 0:
+                    break
+                else:
+                    pass
 except KeyboardInterrupt:
     clear()
     sys.exit()

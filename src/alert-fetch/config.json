@@ -1,5 +1,16 @@
 {
-    "monitored": [
-        "000000"
-    ]
+    "monitored": {
+        "monitored": {
+            "monitored": {
+                "monitored": {
+                    "monitored": [
+                        "000000",
+                        "018051",
+                        "018056",
+                        "018073"
+                    ]
+                }
+            }
+        }
+    }
 }
