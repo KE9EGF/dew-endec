@@ -11,7 +11,7 @@ with open("config.json", "r") as file:
     
 # Variables and crap
 CAR_API = "https://alerts.globaleas.org/api/v2/"
-monitored = config
+monitored = config["monitored"]
 
 def clear():
     # This just clears the terminal output
@@ -19,7 +19,7 @@ def clear():
     # COMMENTED OUT FOR DEBUGGING PURPOSES
     pass
 
-def writeJSON(file="config.json", input):       
+def writeJSON(input, file="config.json"):       
     with open(file, "w+") as output:
         json.dump(input, output, indent=4)
 
