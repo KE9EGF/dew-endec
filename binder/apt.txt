@@ -1,1 +1,8 @@
 micro
+sox
+jq
+htop
+ffmpeg
+tree
+espeak-ng
+alsa-utils
