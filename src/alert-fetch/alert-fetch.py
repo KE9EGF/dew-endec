@@ -16,7 +16,7 @@ monitored = config["monitored"]
 def clear():
     # This just clears the terminal output
     print("\033[2J\033[H", end="")
-    # COMMENTED OUT FOR DEBUGGING PURPOSES
+    # MAY BE COMMENTED OUT FOR DEBUGGING PURPOSES
     pass
 
 def writeJSON(input, file="config.json"):       
@@ -97,6 +97,10 @@ try:
         elif choice == "5":
             while True:
                 clear()
+                if len(monitored) == 0:
+                    print("No FIPS codes to clear")
+                    time.sleep(1)
+                    break
                 print("Are you sure you want to clear FIPS codes? (y/N)")
                 clearConfirm = input("==> ").lower()
                 if clearConfirm == "y":
