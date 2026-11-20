@@ -1,4 +1,4 @@
-# Paclages my beloved
+# Packages my beloved
 import sys
 import time
 import json
@@ -25,6 +25,7 @@ def writeJSON(input, file="config.json"):
 
 def showAlerts(alerts):
     for number, alert in enumerate(alerts, start=1):
+        clear()
         print(f"""
         Alert #{number}
         Type:        {alert["type"]}
@@ -35,19 +36,18 @@ def showAlerts(alerts):
         Message:     {alert["translation"]}
         """)
         input("")
-        clear()
     print("No more alerts.")
     time.sleep(2)
     
 # Getting active alerts
 r = httpx.get(CAR_API + "alerts/active")
 activeAlerts = r.json()
-alerts = []
 
 # Main program
 try:
     while True:
         clear()
+        alerts = []
         choice = ""
         
         print("ALERT-FETCH\n")
@@ -60,7 +60,6 @@ try:
         6. Exit
         """)
         choice = input("==> ")
-        # FIX IF BROKEN
         if choice == "1":
             if len(activeAlerts) == 0:
                 print("No active alerts.")
@@ -69,6 +68,7 @@ try:
             for alert in activeAlerts:
                 if any(code in monitored for code in alert["fipsCodes"]):
                     alerts.append(alert)
+            clear()
             showAlerts(alerts)
         elif choice == "2":
             if len(activeAlerts) == 0:
@@ -76,6 +76,7 @@ try:
                 time.sleep(2)
                 continue
             alerts = activeAlerts
+            clear()
             showAlerts(alerts)
         elif choice == "3":
             while True:
@@ -89,8 +90,36 @@ try:
                     print("Please enter a 6-digit FIPS code.") 
                     time.sleep(1)
                 elif len(code) == 6:
-                    monitored.append(code)
-                    writeJSON({"monitored": monitored})
+                    if code not in monitored:
+                        monitored.append(code)
+                        writeJSON({"monitored": monitored})
+                    else:
+                        print("That FIPS code is already being monitored.")
+                        time.sleep(1)
+                else:
+                    print("Please enter a 6-digit FIPS code.")
+                    time.sleep(1)
+        elif choice == "4":
+            while True:
+                clear()
+                if len(monitored) == 0:
+                    print("No FIPS codes to remove")
+                    time.sleep(1)
+                    break
+                print("Enter one 6-digit FIPS code to remove at a time. Enter nothing to exit.")
+                code = input("==> ")
+                if len(code) == 0:
+                    break
+                elif not code.isdecimal():
+                    print("Please enter a 6-digit FIPS code to remove.") 
+                    time.sleep(1)
+                elif len(code) == 6:
+                    if code not in monitored:
+                        print("That FIPS code is already unmonitored.")
+                        time.sleep(1)
+                    else:
+                        monitored.remove(code)
+                        writeJSON({"monitored": monitored})
                 else:
                     print("Please enter a 6-digit FIPS code.")
                     time.sleep(1)
@@ -111,9 +140,9 @@ try:
                     break
                 else:
                     pass
+        elif choice == "6":
+            clear()
+            break
 except KeyboardInterrupt:
     clear()
     sys.exit()
-
-
-
