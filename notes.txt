@@ -56,8 +56,8 @@ I - The Start: (YOU ARE HERE)
 - Simulate fetching EAS alerts from an API using Python with simple scripts  *
 - Getting SAME headers for alerts and getting alert messages *
 - Get filtering alerts with specific FIPS codes working *
-- Make a terminal-based menu #
-- Generate SAME headers by inputing individual elements
+- Make a terminal-based menu *
+- Generate SAME headers by inputing individual elements #
 - Work on synthesizing voices
 
 II - Getting Serious
